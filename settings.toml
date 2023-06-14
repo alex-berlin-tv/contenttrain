@@ -1,0 +1,9 @@
+nocodb_url = "https://db.alex-berlin.de"
+project = "Inhalte ALEX Digital"
+episode_table = "Episoden"
+query_limit = 1000
+
+crop_path_prefix = "\\\\HMS-BER01-ALX05"
+server_path_prefix = "K:\\"
+transcoding_source_folder = ""
+transcoding_destination_folder = ""
