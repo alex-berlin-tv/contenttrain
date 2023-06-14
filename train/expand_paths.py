@@ -16,6 +16,8 @@ def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, paths: list[str]):
     path = find_path_for_filename(episode.server_index, episode.title, paths)
     if path:
         episodes.update_server_index(episode.noco_id, path)
+    else:
+        episodes.update_has_path_error(episode.noco_id, True)
 
 def find_path_for_filename(server_index: str, title: str, paths: list[str]) -> Optional[str]:
     rsl: Optional[str] = None

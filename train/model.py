@@ -75,4 +75,11 @@ class NocoEpisodes(BaseModel):
         )
 
     def update_has_path_error(self, item_id: int, value: bool):
-        print(f"set has_path_error of item {item_id} to '{value}'")
+        client = nocodb_client()
+        project = nocodb_project()
+        client.table_row_update(
+            project,
+            settings.episode_table, # type: ignore
+            item_id,
+            {"Pfad Error": value},
+        )
