@@ -1,0 +1,17 @@
+[project]
+name = "train"
+authors = [{ name = "ALEX Offener Kanal Berlin", email = "online@alex-berlin.de" }]
+description = "populate our new streaming platform with content"
+dynamic = ["version"]
+dependencies = [
+    "dynaconf",
+    "nocodb",
+    "pydantic",
+    "typer",
+]
+
+[project.scripts]
+train = "train.__main__:app"
+
+[tool.setuptools.dynamic]
+version = {file = "version"}
