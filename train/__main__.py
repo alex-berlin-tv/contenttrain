@@ -14,7 +14,7 @@ def download_files():
 
 @app.command()
 def expand_paths(
-    path: Annotated[Path, typer.Argument]
+    path: Annotated[Path, typer.Argument(help="path to file with tree-walk of server")]
 ):
     """Expand filepaths based on a given text file."""
     print("to be implemented")
