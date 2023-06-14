@@ -1,4 +1,4 @@
-from model import NocoEpisode, NocoEpisodes
+from model import NocoEpisode, NocoEpisodes, SourceState
 
 from typing import Optional
 
@@ -9,15 +9,16 @@ def do_expand_paths(episodes: NocoEpisodes, paths: list[str]):
 
 
 def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, paths: list[str]):
-    if not episode.server_index or episode.server_index == "X":
+    if not episode.server_index or episode.server_index == "X" or "youtube.com" in episode.server_index:
         return
     if episode.server_index.startswith("\\\\"):
         return
     path = find_path_for_filename(episode.server_index, episode.title, paths)
     if path:
-        episodes.update_server_index(episode.noco_id, path)
+        episodes.update_server_index(episode, path)
+        episodes.update_source_state(episode, SourceState.disa_server)
     else:
-        episodes.update_has_path_error(episode.noco_id, True)
+        episodes.update_source_state(episode, SourceState.index_not_found)
 
 def find_path_for_filename(server_index: str, title: str, paths: list[str]) -> Optional[str]:
     rsl: Optional[str] = None
