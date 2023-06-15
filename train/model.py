@@ -88,6 +88,8 @@ class NocoEpisode(BaseModel):
                 rsl += char
             last_char = char
         return f"e-{self.noco_id:04d}_{rsl}"
+    
+    def local_server_source_path(self) -> Path:
 
 
 

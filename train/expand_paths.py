@@ -3,13 +3,13 @@ from model import NocoEpisode, NocoEpisodes, SourceState
 from typing import Optional
 
 
-def do_expand_paths(episodes: NocoEpisodes, paths: list[str]):
+def do_expand_paths(episodes: NocoEpisodes, paths: dict[str, str]):
     for episode in episodes.__root__:
         handle_item(episodes, episode, paths)
 
 
-def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, paths: list[str]):
-    if not episode.server_index or episode.server_index == "X" or "youtube.com" in episode.server_index:
+def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, paths: dict[str, str]):
+    if not episode.server_index or episode.server_index == "X":
         return
     if episode.server_index.startswith("\\\\"):
         return
@@ -20,12 +20,8 @@ def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, paths: list[str]):
     else:
         episodes.update_source_state(episode, SourceState.index_not_found)
 
-def find_path_for_filename(server_index: str, title: str, paths: list[str]) -> Optional[str]:
+def find_path_for_filename(server_index: str, title: str, paths: dict[str, str]) -> Optional[str]:
     rsl: Optional[str] = None
-    for path in paths:
-        if server_index in path:
-            if rsl:
-                print(f"there is more than one result for index {server_index}, cancel operation for {title}")
-                return None
-            rsl = path
+    if server_index in paths:
+        rsl = paths[server_index]
     return rsl
