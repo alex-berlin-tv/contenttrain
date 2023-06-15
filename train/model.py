@@ -1,15 +1,17 @@
 from config import settings
 
+import unicodedata
 from enum import Enum
 from datetime import datetime
+from pathlib import Path
 from typing import Optional
+
 from nocodb.filters import EqFilter
 from nocodb.filters.raw_filter import RawFilter
 from nocodb.filters.factory import raw_template_filter_class_factory as custom_filter
 from nocodb.infra.requests_client import NocoDBRequestsClient
 from nocodb.nocodb import APIToken, NocoDBProject
 from pydantic import BaseModel, Field
-import unicodedata
 
 
 def nocodb_client() -> NocoDBRequestsClient:
@@ -89,8 +91,13 @@ class NocoEpisode(BaseModel):
             last_char = char
         return f"e-{self.noco_id:04d}_{rsl}"
     
-    def local_server_source_path(self) -> Path:
-
+    def local_server_source_path(self) -> Optional[Path]:
+        if not self.server_index:
+            print("error: server index is null")
+            return None
+        path = self.server_index.replace(settings.crop_path_prefix, "", 1) # type: ignore
+        path = path.replace("\\", "/")
+        return Path(settings.file_server_location) / Path(path) # type: ignore
 
 
 class NocoEpisodes(BaseModel):

@@ -3,7 +3,7 @@ project = "Inhalte ALEX Digital"
 episode_table = "Episoden"
 query_limit = 1000
 
-crop_path_prefix = "\\\\HMS-BER01-ALX05"
-show_files_folder = "/Volumes/Sendedaten"
+crop_path_prefix = "\\\\HMS-BER01-ALX05\\"
+file_server_location = "/Volumes"
 transcoding_source_folder = "test_output"
 transcoding_destination_folder = ""

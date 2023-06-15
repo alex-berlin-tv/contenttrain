@@ -20,10 +20,10 @@ def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, count: int, total:
         return count
     if not episode.youtube_url or episode.youtube_url == "":
         print(f"No YouTube URL for item with id e-{episode.noco_id} and title '{episode.title}' ignoring this entry")
-        return count
+        return count + 1
     if episode.is_copied:
         print(f"{progress} Already downloaded {description}")
-        return count
+        return count + 1
     print(f"{progress} Download {description}")
     base = Path(settings.transcoding_source_folder) # type: ignore
     options = {

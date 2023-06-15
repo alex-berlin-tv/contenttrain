@@ -1,3 +1,4 @@
+from import_files import do_import_files
 from expand_paths import do_expand_paths
 from folder_list import do_folder_list
 from model import NocoEpisodes, SourceState
@@ -38,6 +39,13 @@ def folder_walk(
 ):
     """Reads content of source folder and lists containing files to a file."""
     do_folder_list(path, text, csv)
+
+
+@app.command()
+def import_files():
+    """Import files into media encoder's source folder."""
+    episodes = NocoEpisodes.from_nocodb()
+    do_import_files(episodes)
 
 
 @app.command()
