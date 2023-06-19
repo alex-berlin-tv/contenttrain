@@ -32,4 +32,5 @@ def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, count: int, total:
         str(source),
         str(destination)
     )
+    episodes.update_is_copied(episode, True)
     return count + 1

@@ -2,6 +2,7 @@ from import_files import do_import_files
 from expand_paths import do_expand_paths
 from folder_list import do_folder_list
 from model import NocoEpisodes, SourceState
+from update_transcoded import do_update_transcoded
 from youtube_download import do_youtube_download
 
 import json
@@ -12,12 +13,6 @@ from typing_extensions import Annotated
 
 
 app = typer.Typer()
-
-
-@app.command()
-def copy_files():
-    """Copies the files from the server to a local folder."""
-    print("to be implemented")
 
 
 @app.command()

@@ -11,7 +11,7 @@ def do_folder_list(output: Path, as_text: bool, as_csv):
         print("NOUP choose between csv and txt")
         return
     rsl: dict[str, str] = {}
-    for root, folders, files in os.walk(settings.show_files_folder): # type: ignore
+    for root, folders, files in os.walk(settings.file_server_location): # type: ignore
         folder = Path(root)
         for file in files:
             rsl[os.path.splitext(file)[0]] = str(folder / Path(file))
