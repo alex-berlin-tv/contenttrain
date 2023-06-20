@@ -14,7 +14,7 @@ def do_import_files(episodes: NocoEpisodes):
 
 def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, count: int, total: int) -> int:
     progress = f"[{count}/{total}]"
-    description = f"item e-{episode.noco_id} from {episode.youtube_url}, title: '{episode.title}'"
+    description = f"item e-{episode.noco_id}, title: '{episode.title}'"
     if episode.source_state != SourceState.disa_server:
         return count
     if not episode.server_index or episode.server_index == "":

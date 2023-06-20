@@ -57,6 +57,7 @@ class NocoEpisode(BaseModel):
     source_state: Optional[SourceState] = Field(alias="Status Quelle")
     is_copied: bool = Field(alias="Auf Transcodingrechner")
     is_transcoded: bool = Field(alias="Transcoding abgeschlossen")
+    source_file: Optional[str] = Field(alias="Source Fiel")
 
     class Config:
         allow_populate_by_field_name = True
@@ -155,6 +156,26 @@ class NocoEpisodes(BaseModel):
             {"Auf Transcodingrechner": value},
         )
 
+    def update_is_transcoded(self, episode: NocoEpisode, value: bool):
+        client = nocodb_client()
+        project = nocodb_project()
+        client.table_row_update(
+            project,
+            settings.episode_table, # type: ignore
+            episode.noco_id,
+            {"Auf Transcodingrechner": value},
+        )
+
+    def update_source_file(self, episode: NocoEpisode, value: str):
+        client = nocodb_client()
+        project = nocodb_project()
+        client.table_row_update(
+            project,
+            settings.episode_table, # type: ignore
+            episode.noco_id,
+            {"Source File": value},
+        )
+
     def count_by_source_state(self, state: SourceState) -> int:
         client = nocodb_client()
         project = nocodb_project()
@@ -164,3 +185,14 @@ class NocoEpisodes(BaseModel):
             filter_obj=EqFilter("Status Quelle", state.value)
         )
         return data["count"]
+    
+    def count_by_is_copied(self, is_copied: bool) -> int:
+        client = nocodb_client()
+        project = nocodb_project()
+        data = client.table_count(
+            project,
+            settings.episode_table, # type: ignore
+            filter_obj=EqFilter("Auf Transcodingrechner", is_copied)
+        )
+        return data["count"]
+

@@ -8,7 +8,7 @@ from pathlib import Path
 
 def do_folder_list(output: Path, as_text: bool, as_csv):
     if as_text and as_csv:
-        print("NOUP choose between csv and txt")
+        print("NOUP, choose between csv and txt")
         return
     rsl: dict[str, str] = {}
     for root, folders, files in os.walk(settings.file_server_location): # type: ignore

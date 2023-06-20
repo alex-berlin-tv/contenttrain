@@ -2,7 +2,8 @@ from import_files import do_import_files
 from expand_paths import do_expand_paths
 from folder_list import do_folder_list
 from model import NocoEpisodes, SourceState
-from update_transcoded import do_update_transcoded
+from transcode import do_transcode
+from update import do_update
 from youtube_download import do_youtube_download
 
 import json
@@ -44,9 +45,16 @@ def import_files():
 
 
 @app.command()
-def update_transcoded():
+def transcode():
     """Reads Media Encoder's output dir and updates the database accordingly."""
-    print("to be implemented")
+    episodes = NocoEpisodes.from_nocodb()
+    do_transcode(episodes)
+
+
+@app.command()
+def update():
+    episodes = NocoEpisodes.from_nocodb()
+    do_update(episodes)
 
 
 @app.command()
@@ -54,17 +62,6 @@ def youtube_download():
     """Download files from YouTube into the local folder."""
     episodes = NocoEpisodes.from_nocodb()
     do_youtube_download(episodes)
-
-
-@app.command()
-def update_source_state():
-    episodes = NocoEpisodes.from_nocodb()
-    for episode in episodes.__root__:
-        if not episode.server_index or episode.server_index in ["X", ""]:
-            episodes.update_source_state(episode, SourceState.unknown)
-            continue
-        if episode.server_index.startswith("\\\\"):
-            episodes.update_source_state(episode, SourceState.disa_server)
 
 
 if __name__ == "__main__":
