@@ -1,3 +1,4 @@
+from delete import do_delete
 from import_files import do_import_files
 from expand_paths import do_expand_paths
 from folder_list import do_folder_list
@@ -13,6 +14,13 @@ from typing_extensions import Annotated
 
 
 app = typer.Typer()
+
+
+@app.command()
+def delete_transcoded():
+    """Delete files in the transcoding source folder if they marked as transcoded."""
+    episodes = NocoEpisodes.from_nocodb()
+    do_delete(episodes)
 
 
 @app.command()

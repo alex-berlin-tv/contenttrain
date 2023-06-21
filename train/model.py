@@ -1,3 +1,4 @@
+from ntpath import join
 from config import settings
 
 import unicodedata
@@ -8,9 +9,8 @@ from typing import Any, Optional
 
 from nocodb.filters import EqFilter
 from nocodb.filters.raw_filter import RawFilter
-from nocodb.filters.factory import raw_template_filter_class_factory as custom_filter
 from nocodb.infra.requests_client import NocoDBRequestsClient
-from nocodb.nocodb import APIToken, NocoDBProject
+from nocodb.nocodb import APIToken, NocoDBProject, WhereFilter
 from pydantic import BaseModel, Field
 
 
@@ -132,6 +132,16 @@ class NocoEpisodes(BaseModel):
             {key: value},
         )
     
+    def __count(self, filter_obj: WhereFilter) -> int:
+        client = nocodb_client()
+        project = nocodb_project()
+        data = client.table_count(
+            project,
+            settings.episode_table, # type: ignore
+            filter_obj=filter_obj
+        )
+        return data["count"]
+    
     def update_server_index(self, episode: NocoEpisode, value: Optional[str]):
         self.__update(episode, "Server Index", value)
 
@@ -151,22 +161,11 @@ class NocoEpisodes(BaseModel):
         self.__update(episode, "Source File", value)
 
     def count_by_source_state(self, state: SourceState) -> int:
-        client = nocodb_client()
-        project = nocodb_project()
-        data = client.table_count(
-            project,
-            settings.episode_table, # type: ignore
-            filter_obj=EqFilter("Status Quelle", state.value)
-        )
-        return data["count"]
+        return self.__count(EqFilter("Status Quelle", state.value))
     
-    def count_by_is_copied(self, is_copied: bool) -> int:
-        client = nocodb_client()
-        project = nocodb_project()
-        data = client.table_count(
-            project,
-            settings.episode_table, # type: ignore
-            filter_obj=EqFilter("Auf Transcodingrechner", is_copied)
-        )
-        return data["count"]
+    def count_by_file_state(self, state: FileState) -> int:
+        return self.__count(EqFilter("Status Datei auf Edit", state.value))
+    
+    def count_by_is_transcoded(self, value: bool) -> int:
+        return self.__count(EqFilter("Transcoding abgeschlossen", value))
 

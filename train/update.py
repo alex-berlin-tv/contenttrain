@@ -1,5 +1,6 @@
 from config import settings
 from model import FileState, NocoEpisode, NocoEpisodes, SourceState
+from utils import transcoded_items_present
 
 import os
 from pathlib import Path
@@ -7,13 +8,13 @@ import re
 
 
 def do_update(episodes: NocoEpisodes):
-   total = len(episodes.__root__) 
-   count = 1
-   tr_items = transcoded_items_present()
-   print(tr_items)
-   for episode in episodes.__root__:
-    handle_item(episodes, episode, tr_items, count, total)
-    count += 1
+    total = len(episodes.__root__) 
+    count = 1
+    tr_items = transcoded_items_present()
+    print(tr_items)
+    for episode in episodes.__root__:
+        handle_item(episodes, episode, tr_items, count, total)
+        count += 1
 
 
 def handle_item(
@@ -52,17 +53,3 @@ def handle_item(
        not episode.is_transcoded:
         print(f"{progress} Set transcoded state to True {description}")
         episodes.update_is_transcoded(episode, True) 
-
-
-def transcoded_items_present() -> dict[int, str]:
-    rsl: dict[int, str] = {}
-    files: list[str] = []
-    for root, folders, f in os.walk(settings.transcoding_destination_folder): # type: ignore
-        files = f
-    pattern = re.compile(r"e-(\d+)_.*")
-    for file in files:
-        id = pattern.match(file)
-        if not id:
-            raise ValueError(f"couldn't parse id from filename {file}")
-        rsl[int(id.group(1))] = file
-    return rsl
