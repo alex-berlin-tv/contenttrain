@@ -57,7 +57,7 @@ class NocoEpisode(BaseModel):
     source_state: Optional[SourceState] = Field(alias="Status Quelle")
     is_copied: bool = Field(alias="Auf Transcodingrechner")
     is_transcoded: bool = Field(alias="Transcoding abgeschlossen")
-    source_file: Optional[str] = Field(alias="Source Fiel")
+    source_file: Optional[str] = Field(alias="Source File")
 
     class Config:
         allow_populate_by_field_name = True

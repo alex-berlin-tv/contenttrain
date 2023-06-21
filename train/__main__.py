@@ -1,8 +1,7 @@
 from import_files import do_import_files
 from expand_paths import do_expand_paths
 from folder_list import do_folder_list
-from model import NocoEpisodes, SourceState
-from transcode import do_transcode
+from model import NocoEpisodes
 from update import do_update
 from youtube_download import do_youtube_download
 
@@ -42,13 +41,6 @@ def import_files():
     """Import files into media encoder's source folder."""
     episodes = NocoEpisodes.from_nocodb()
     do_import_files(episodes)
-
-
-@app.command()
-def transcode():
-    """Reads Media Encoder's output dir and updates the database accordingly."""
-    episodes = NocoEpisodes.from_nocodb()
-    do_transcode(episodes)
 
 
 @app.command()

@@ -5,7 +5,6 @@ description = "populate our new streaming platform with content"
 dynamic = ["version"]
 dependencies = [
     "dynaconf",
-    "ffmpeg-python",
     "nocodb",
     "pydantic",
     "typer",
