@@ -3,7 +3,7 @@ from config import settings
 import os
 import re
 
-IGNORE = ["index.ini"]
+IGNORE = ["desktop.ini"]
 
 
 def transcoded_items_present() -> dict[int, str]:
