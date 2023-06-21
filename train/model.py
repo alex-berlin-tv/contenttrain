@@ -4,7 +4,7 @@ import unicodedata
 from enum import Enum
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 from nocodb.filters import EqFilter
 from nocodb.filters.raw_filter import RawFilter
@@ -38,9 +38,15 @@ class SourceState(str, Enum):
     YOUTUBE = "YouTube"
 
 
+class FileState(str, Enum):
+    MISSING = "Fehlt"
+    EXISTS = "Vorhanden"
+    DONE = "Abgeschlossen & Gelöscht"
+
+
 class NocoEpisode(BaseModel):
-    _complete_filter = RawFilter("(Titel,isnot,null)~and(Beschreibung,isnot,null)")
-    # _complete_filter = RawFilter("(Titel,isnot,null)")
+    # _complete_filter = RawFilter("(Titel,isnot,null)~and(Beschreibung,isnot,null)")
+    _complete_filter = RawFilter("(Titel,isnot,null)")
 
     noco_id: int = Field(alias="Id")
     created_at: datetime = Field(alias="CreatedAt")
@@ -55,7 +61,7 @@ class NocoEpisode(BaseModel):
     description: Optional[str] = Field(alias="Beschreibung")
     tags: Optional[str] = Field(alias="Schlagwörter")
     source_state: Optional[SourceState] = Field(alias="Status Quelle")
-    is_copied: bool = Field(alias="Auf Transcodingrechner")
+    file_on_edit_state: Optional[FileState] = Field(alias="Status Datei auf Edit")
     is_transcoded: bool = Field(alias="Transcoding abgeschlossen")
     source_file: Optional[str] = Field(alias="Source File")
 
@@ -115,66 +121,34 @@ class NocoEpisodes(BaseModel):
             params={"limit": settings.query_limit},
         )
         return cls.parse_obj(data_raw["list"])
+
+    def __update(self, episode: NocoEpisode, key: str, value: Any):
+        client = nocodb_client()
+        project = nocodb_project()
+        client.table_row_update(
+            project,
+            settings.episode_table, # type: ignore
+            episode.noco_id,
+            {key: value},
+        )
     
     def update_server_index(self, episode: NocoEpisode, value: Optional[str]):
-        client = nocodb_client()
-        project = nocodb_project()
-        client.table_row_update(
-            project,
-            settings.episode_table, # type: ignore
-            episode.noco_id,
-            {"Server Index": value},
-        )
+        self.__update(episode, "Server Index", value)
 
     def update_source_state(self, episode: NocoEpisode, value: SourceState):
-        client = nocodb_client()
-        project = nocodb_project()
-        client.table_row_update(
-            project,
-            settings.episode_table, # type: ignore
-            episode.noco_id,
-            {"Status Quelle": value.value},
-        )
+        self.__update(episode, "Status Quelle", value)
 
     def update_has_path_error(self, episode: NocoEpisode, value: bool):
-        client = nocodb_client()
-        project = nocodb_project()
-        client.table_row_update(
-            project,
-            settings.episode_table, # type: ignore
-            episode.noco_id,
-            {"Pfad Error": value},
-        )
+        self.__update(episode, "Pfad Error", value)
 
-    def update_is_copied(self, episode: NocoEpisode, value: bool):
-        client = nocodb_client()
-        project = nocodb_project()
-        client.table_row_update(
-            project,
-            settings.episode_table, # type: ignore
-            episode.noco_id,
-            {"Auf Transcodingrechner": value},
-        )
+    def update_file_on_edit_state(self, episode: NocoEpisode, value: FileState):
+        self.__update(episode, "Status Datei auf Edit", value)
 
     def update_is_transcoded(self, episode: NocoEpisode, value: bool):
-        client = nocodb_client()
-        project = nocodb_project()
-        client.table_row_update(
-            project,
-            settings.episode_table, # type: ignore
-            episode.noco_id,
-            {"Auf Transcodingrechner": value},
-        )
+        self.__update(episode, "Transcoding abgeschlossen", value)
 
     def update_source_file(self, episode: NocoEpisode, value: str):
-        client = nocodb_client()
-        project = nocodb_project()
-        client.table_row_update(
-            project,
-            settings.episode_table, # type: ignore
-            episode.noco_id,
-            {"Source File": value},
-        )
+        self.__update(episode, "Source File", value)
 
     def count_by_source_state(self, state: SourceState) -> int:
         client = nocodb_client()

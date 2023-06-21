@@ -1,5 +1,5 @@
 from config import settings
-from model import NocoEpisodes, NocoEpisode, SourceState
+from model import FileState, NocoEpisodes, NocoEpisode, SourceState
 
 import shutil
 from pathlib import Path
@@ -20,7 +20,7 @@ def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, count: int, total:
     if not episode.server_index or episode.server_index == "":
         print(f"No server_index path for item with id e-{episode.noco_id} and title '{episode.title}' ignoring this entry")
         return count + 1
-    if episode.is_copied:
+    if episode.file_on_edit_state == FileState.EXISTS:
         print(f"{progress} Already copied {description}")
         return count + 1
     print(f"{progress} Copy {description}")
@@ -32,5 +32,5 @@ def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, count: int, total:
         str(source),
         str(destination)
     )
-    episodes.update_is_copied(episode, True)
+    episodes.update_file_on_edit_state(episode, FileState.EXISTS)
     return count + 1

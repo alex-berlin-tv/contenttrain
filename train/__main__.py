@@ -1,7 +1,7 @@
 from import_files import do_import_files
 from expand_paths import do_expand_paths
 from folder_list import do_folder_list
-from model import NocoEpisodes
+from model import NocoEpisodes, FileState
 from update import do_update
 from youtube_download import do_youtube_download
 
@@ -58,7 +58,8 @@ def youtube_download():
 
 @app.command()
 def upgrade():
-    episodes = NocoEpisodes.from_nocodb()
+    pass
+
 
 if __name__ == "__main__":
     app()

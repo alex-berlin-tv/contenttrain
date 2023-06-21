@@ -1,5 +1,5 @@
 from config import settings
-from model import NocoEpisodes, NocoEpisode, SourceState
+from model import FileState, NocoEpisodes, NocoEpisode, SourceState
 
 from pathlib import Path
 
@@ -21,7 +21,7 @@ def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, count: int, total:
     if not episode.youtube_url or episode.youtube_url == "":
         print(f"No YouTube URL for item with id e-{episode.noco_id} and title '{episode.title}' ignoring this entry")
         return count + 1
-    if episode.is_copied:
+    if episode.file_on_edit_state == FileState.EXISTS:
         print(f"{progress} Already downloaded {description}")
         return count + 1
     print(f"{progress} Download {description}")
@@ -31,5 +31,5 @@ def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, count: int, total:
     }
     with YoutubeDL(options) as ydl:
         ydl.download([episode.youtube_url])
-    episodes.update_is_copied(episode, True) 
+    episodes.update_file_on_edit_state(episode, FileState.EXISTS)
     return count + 1
