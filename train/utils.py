@@ -3,6 +3,8 @@ from config import settings
 import os
 import re
 
+IGNORE = ["index.ini"]
+
 
 def transcoded_items_present() -> dict[int, str]:
     rsl: dict[int, str] = {}
@@ -11,6 +13,8 @@ def transcoded_items_present() -> dict[int, str]:
         files = f
     pattern = re.compile(r"e-(\d+)_.*")
     for file in files:
+        if file in IGNORE:
+            continue
         id = pattern.match(file)
         if not id:
             raise ValueError(f"couldn't parse id from filename {file}")
