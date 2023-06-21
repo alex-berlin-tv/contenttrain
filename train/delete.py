@@ -27,9 +27,12 @@ def handle_item(
     if not episode.is_transcoded or \
        episode.noco_id not in tr_items:
         return count
-    path = Path(settings.transcoding_destination_folder) / Path(episode.file_name()).with_suffix(".mp4") # type: ignore
-    print(f"{progress} Delete file {path}")
-    os.remove(path)
+    source = Path(settings.transcoding_destination_folder) / episode.source_file # type: ignore
+    destination = Path(settings.transcoding_destination_folder) / Path(episode.file_name()).with_suffix(".mp4") # type: ignore
+    print(f"{progress} Delete transcoding source file {source}")
+    os.remove(source)
+    print(f"{progress} Delete transcoded file {destination}")
+    os.remove(destination)
     print(f"{progress} Set file on edit state to done {description}")
     episodes.update_file_on_edit_state(episode, FileState.DONE)
     return count + 1
