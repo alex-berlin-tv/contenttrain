@@ -1,5 +1,6 @@
 from config import settings
 
+import glob
 import os
 import re
 
@@ -8,9 +9,7 @@ IGNORE = ["desktop.ini"]
 
 def transcoded_items_present() -> dict[int, str]:
     rsl: dict[int, str] = {}
-    files: list[str] = []
-    for root, folders, f in os.walk(settings.transcoding_destination_folder): # type: ignore
-        files = f
+    files: list[str] = glob.glob(os.path.join(settings.transcoding_destination_folder, "*")) # type: ignore
     pattern = re.compile(r"e-(\d+)_.*")
     for file in files:
         if file in IGNORE:
