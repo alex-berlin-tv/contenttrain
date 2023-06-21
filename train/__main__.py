@@ -56,5 +56,9 @@ def youtube_download():
     do_youtube_download(episodes)
 
 
+@app.command()
+def upgrade():
+    episodes = NocoEpisodes.from_nocodb()
+
 if __name__ == "__main__":
     app()

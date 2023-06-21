@@ -26,16 +26,16 @@ def nocodb_project() -> NocoDBProject:
 
 
 class EpisodeTyp(str, Enum):
-    event = "Event"
-    music = "Musik"
-    show = "Sendung"
+    EVENT = "Event"
+    MUSIC = "Musik"
+    SHOW = "Sendung"
 
 
 class SourceState(str, Enum):
-    unknown = "Unklar"
-    index_not_found = "Index nicht auf Server"
-    disa_server = "Sendeserver"
-    youtube = "YouTube"
+    UNKNOWN = "Unklar"
+    INDEX_NOT_FOUND = "Index nicht auf Server"
+    DISA_SERVER = "Sendeserver"
+    YOUTUBE = "YouTube"
 
 
 class NocoEpisode(BaseModel):

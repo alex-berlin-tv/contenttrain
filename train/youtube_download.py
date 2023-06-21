@@ -7,7 +7,7 @@ from yt_dlp import YoutubeDL,  YoutubeDL
 
 
 def do_youtube_download(episodes: NocoEpisodes):
-    total = episodes.count_by_source_state(SourceState.youtube)
+    total = episodes.count_by_source_state(SourceState.YOUTUBE)
     count = 1
     for episode in episodes.__root__:
         count = handle_item(episodes, episode, count, total)
@@ -16,7 +16,7 @@ def do_youtube_download(episodes: NocoEpisodes):
 def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, count: int, total: int) -> int:
     progress = f"[{count}/{total}]"
     description = f"item e-{episode.noco_id} from {episode.youtube_url}, title: '{episode.title}'"
-    if episode.source_state != SourceState.youtube:
+    if episode.source_state != SourceState.YOUTUBE:
         return count
     if not episode.youtube_url or episode.youtube_url == "":
         print(f"No YouTube URL for item with id e-{episode.noco_id} and title '{episode.title}' ignoring this entry")
