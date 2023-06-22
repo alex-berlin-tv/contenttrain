@@ -5,5 +5,6 @@ query_limit = 1000
 
 crop_path_prefix = "\\\\HMS-BER01-ALX05\\"
 file_server_location = "/Volumes/Sendedaten"
+temp_copy_destination = "I:\\tmp"
 transcoding_source_folder = "test_output"
 transcoding_destination_folder = "test_transcoded"

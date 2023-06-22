@@ -23,13 +23,20 @@ def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, count: int, total:
     if episode.file_on_edit_state == FileState.EXISTS:
         print(f"{progress} Already copied {description}")
         return count + 1
-    print(f"{progress} Copy {description}")
+    print(f"{progress} Copy from server to temp {description}")
     source = episode.local_server_source_path()
+    temp_destination = Path(settings.temp_copy_destination) / Path(episode.file_name()).with_suffix(source.suffix) # type: ignore
     destination = Path(settings.transcoding_source_folder) / Path(episode.file_name()).with_suffix(source.suffix) # type: ignore
     if not source:
+        print("ERROR: local_server_source_path is not set for item")
         return count + 1
     shutil.copy(
         str(source),
+        str(temp_destination)
+    )
+    print(f"{progress} Copy from temp to destination {description}")
+    shutil.copy(
+        str(temp_destination),
         str(destination)
     )
     episodes.update_file_on_edit_state(episode, FileState.EXISTS)
