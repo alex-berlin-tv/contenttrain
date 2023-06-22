@@ -17,7 +17,9 @@ app = typer.Typer()
 
 
 @app.command()
-def delete_transcoded():
+def delete_transcoded(
+    step: Annotated[bool, typer.Option(help="confirm after every deletion")]=False,
+):
     """Delete files in the transcoding source folder if they marked as transcoded."""
     episodes = NocoEpisodes.from_nocodb()
     do_delete(episodes)
