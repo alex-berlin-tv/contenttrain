@@ -13,7 +13,10 @@ def folder_walk(path: Path) -> list[Path]:
         if item.is_file():
             rsl.append(item.absolute())
         elif item.is_dir():
-            rsl.extend(folder_walk(item))
+            try:
+                rsl.extend(folder_walk(item))
+            except PermissionError:
+                continue
     return rsl
 
 
