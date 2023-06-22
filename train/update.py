@@ -51,5 +51,5 @@ def handle_item(
        episode.file_on_edit_state == FileState.DONE) and \
        episode.noco_id in tr_items and \
        not episode.is_transcoded:
-        print(f"{progress} Set transcoded state to True {description}")
+        print(f"{progress} Mark as transcoded {description}")
         episodes.update_is_transcoded(episode, True) 
