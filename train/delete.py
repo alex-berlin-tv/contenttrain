@@ -28,11 +28,11 @@ def handle_item(
     if not episode.is_transcoded or \
        episode.noco_id not in tr_items:
         return count
-    source = Path(settings.transcoding_destination_folder) / episode.source_file # type: ignore
+    source = Path(settings.transcoding_source_folder) / episode.source_file # type: ignore
     print(f"{progress} Delete transcoding source file {source}")
+    if do_step:
+        input(f"-> Press enter to proceed with the next item")
     os.remove(source)
     print(f"{progress} Set file on edit state to done {description}")
     episodes.update_file_on_edit_state(episode, FileState.DONE)
-    if do_step:
-        input("-> Press enter to proceed with the next item")
     return count + 1
