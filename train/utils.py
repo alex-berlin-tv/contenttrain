@@ -15,3 +15,9 @@ def transcoded_items_present() -> dict[int, str]:
         if id:
             rsl[int(id.group(1))] = str(file)
     return rsl
+
+
+def print_transcoded_items(items: dict[int, str], print_items: bool):
+    if print_items:
+        for key, value in items.items():
+            print(f"{key}:\t {value}")

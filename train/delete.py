@@ -1,16 +1,16 @@
 from config import settings
 from model import FileState, NocoEpisode, NocoEpisodes
-from utils import transcoded_items_present
+from utils import print_transcoded_items, transcoded_items_present
 
 import os
 from pathlib import Path
 
 
-def do_delete(episodes: NocoEpisodes, do_step: bool):
+def do_delete(episodes: NocoEpisodes, do_step: bool, print_tr_items: bool):
     total = episodes.count_by_is_transcoded(True)
     count = 1
     tr_items = transcoded_items_present()
-    print(tr_items)
+    print_transcoded_items(tr_items, print_tr_items)
     for episode in episodes.__root__:
         count = handle_item(episodes, episode, tr_items, do_step, count, total)
 

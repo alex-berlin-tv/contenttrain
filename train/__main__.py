@@ -18,11 +18,12 @@ app = typer.Typer()
 
 @app.command()
 def delete_transcoded(
-    disable_step: Annotated[bool, typer.Option(help="diasble confirm after every deletion")]=False,
+    disable_step: Annotated[bool, typer.Option(help="disable confirm after every deletion")]=False,
+    print_transcoded: Annotated[bool, typer.Option(help="show parsed transcoded files")]=False, 
 ):
     """Delete files in the transcoding source folder if they marked as transcoded."""
     episodes = NocoEpisodes.from_nocodb()
-    do_delete(episodes, not disable_step)
+    do_delete(episodes, not disable_step, print_transcoded)
 
 
 @app.command()
@@ -54,9 +55,11 @@ def import_files():
 
 
 @app.command()
-def update():
+def update(
+    print_transcoded: Annotated[bool, typer.Option(help="show parsed transcoded files")]=False, 
+):
     episodes = NocoEpisodes.from_nocodb()
-    do_update(episodes)
+    do_update(episodes, print_transcoded)
 
 
 @app.command()
