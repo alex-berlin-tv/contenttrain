@@ -4,6 +4,7 @@ from expand_paths import do_expand_paths
 from folder_list import do_folder_list
 from model import NocoEpisodes, FileState
 from update import do_update
+from utils import ask_for_confirmation
 from youtube_download import do_youtube_download
 
 import json
@@ -22,6 +23,11 @@ def delete_transcoded(
     print_transcoded: Annotated[bool, typer.Option(help="show parsed transcoded files")]=False, 
 ):
     """Delete files in the transcoding source folder if they marked as transcoded."""
+    do_proceed = ask_for_confirmation(
+        "Only execute this command if media encoder hasn't any partly done files"
+    )
+    if not do_proceed:
+        return
     episodes = NocoEpisodes.from_nocodb()
     do_delete(episodes, not disable_step, print_transcoded)
 

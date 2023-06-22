@@ -25,7 +25,6 @@ def items_present(folder: Path) -> dict[int, str]:
     folder = Path(folder) # type: ignore
     # files = [file for file in folder.iterdir() if file.is_file()]
     files = folder_walk(folder)
-    print(files)
     pattern = re.compile(r"e-(\d+)_.*")
     for file in files:
         id = pattern.match(str(file.name))
@@ -38,3 +37,8 @@ def print_id_files(items: dict[int, str], print_items: bool):
     if print_items:
         for key, value in items.items():
             print(f"{key}:\t {value}")
+
+
+def ask_for_confirmation(msg: str) -> bool:
+    user_input = input(f"{msg} proceed? [y/N] ")
+    return user_input == "Y"
