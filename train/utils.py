@@ -1,3 +1,4 @@
+from pathlib import Path
 from config import settings
 
 import glob
@@ -6,10 +7,11 @@ import re
 
 def transcoded_items_present() -> dict[int, str]:
     rsl: dict[int, str] = {}
-    files: list[str] = glob.glob(os.path.join(settings.transcoding_destination_folder, "*")) # type: ignore
+    folder = Path(settings.transcoding_destination_folder) # type: ignore
+    files = [file for file in folder.iterdir() if file.is_file()]
     pattern = re.compile(r"e-(\d+)_.*")
     for file in files:
-        id = pattern.match(file)
+        id = pattern.match(str(file))
         if id:
-            rsl[int(id.group(1))] = file
+            rsl[int(id.group(1))] = str(file)
     return rsl
