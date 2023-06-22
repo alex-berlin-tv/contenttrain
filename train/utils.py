@@ -40,5 +40,5 @@ def print_id_files(items: dict[int, str], print_items: bool):
 
 
 def ask_for_confirmation(msg: str) -> bool:
-    user_input = input(f"{msg} proceed? [y/N] ")
-    return user_input == "Y"
+    user_input = input(f"{msg}. Proceed? [y/N] ")
+    return user_input == "y"

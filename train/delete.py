@@ -36,6 +36,7 @@ def handle_item(
     source = raw_items[episode.noco_id]
     print(f"{progress} Delete transcoding source file {source}")
     if do_step:
+        print(source)
         input(f"-> Press enter to proceed with the next item")
     os.remove(source)
     print(f"{progress} Set file on edit state to done {description}")
