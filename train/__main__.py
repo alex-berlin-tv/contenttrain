@@ -22,7 +22,7 @@ def delete_transcoded(
 ):
     """Delete files in the transcoding source folder if they marked as transcoded."""
     episodes = NocoEpisodes.from_nocodb()
-    do_delete(episodes)
+    do_delete(episodes, step)
 
 
 @app.command()
