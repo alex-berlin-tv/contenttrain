@@ -1,6 +1,6 @@
 from config import settings
 from model import FileState, NocoEpisode, NocoEpisodes, SourceState
-from utils import print_transcoded_items, transcoded_items_present
+from utils import print_id_files, items_present
 
 import os
 from pathlib import Path
@@ -10,8 +10,8 @@ import re
 def do_update(episodes: NocoEpisodes, print_tr_items: bool):
     total = len(episodes.__root__) 
     count = 1
-    tr_items = transcoded_items_present()
-    print_transcoded_items(tr_items, print_tr_items)
+    tr_items = items_present(settings.transcoding_destination_folder) # type: ignore
+    print_id_files(tr_items, print_tr_items)
     for episode in episodes.__root__:
         handle_item(episodes, episode, tr_items, count, total)
         count += 1
