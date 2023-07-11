@@ -1,4 +1,3 @@
-from config import settings
 from delete import do_delete
 from import_files import do_import_files
 from expand_paths import do_expand_paths
@@ -46,11 +45,12 @@ def expand_paths(
 
 @app.command()
 def folder_walk(
+    path: Annotated[Path, typer.Argument(help="output path for file list")],
     text: Annotated[bool, typer.Option(help="write folders as text file")]=False,
     csv: Annotated[bool, typer.Option(help="write folders as csv file")]=False,
 ):
     """Reads content of source folder and lists containing files to a file."""
-    do_folder_list(settings.file_server_location, text, csv)
+    do_folder_list(path, text, csv)
 
 
 @app.command()
