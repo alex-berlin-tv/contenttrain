@@ -28,6 +28,7 @@ def handle_item(
     description = f"item e-{episode.noco_id}, title: '{episode.title}'"
     if (not episode.server_index or \
        episode.server_index in ["X", ""]) and \
+       episode.youtube_url == "" and \
        episode.source_state != SourceState.UNKNOWN:
         print(f"{progress} Set SourceState to Unknown {description}")
         episodes.update_source_state(episode, SourceState.UNKNOWN)
@@ -36,7 +37,7 @@ def handle_item(
        episode.source_state != SourceState.DISA_SERVER:
         print(f"{progress} Set SourceState to DiSa-Server {description}")
         episodes.update_source_state(episode, SourceState.DISA_SERVER)
-    if not episode.server_index and \
+    if (not episode.server_index or episode.server_index == "X") and \
        episode.youtube_url and \
        episode.source_state != SourceState.YOUTUBE:
         print(f"{progress} Set SourceState to YouTube {description}")
