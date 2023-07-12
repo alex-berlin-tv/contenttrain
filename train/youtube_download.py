@@ -28,6 +28,7 @@ def handle_item(episodes: NocoEpisodes, episode: NocoEpisode, count: int, total:
     base = Path(settings.transcoding_source_folder) # type: ignore
     options = {
         'outtmpl': f"{base}/{episode.file_name()}.%(ext)s",
+        'nooverwrites': True,
     }
     with YoutubeDL(options) as ydl:
         ydl.download([episode.youtube_url])
